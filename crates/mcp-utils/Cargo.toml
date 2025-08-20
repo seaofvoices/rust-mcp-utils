@@ -1,0 +1,22 @@
+[package]
+name = "mcp-utils"
+version = "0.1.0"
+description = "Abstractions that extend rust-mcp-sdk for simplified MCP tool definition and server setup"
+authors = ["jeparlefrancais <jeparlefrancais21@gmail.com>"]
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/seaofvoices/rust-mcp-utils"
+keywords = ["mcp", "builder", "utils", "tools"]
+readme = "README.md"
+
+[badges]
+github = { repository = "seaofvoices/rust-mcp-utils" }
+
+[dependencies]
+rust-mcp-sdk = { workspace = true, default-features = false, features = [ "server", "hyper-server", "macros", "2025_06_18" ] }
+
+async-trait = "0.1.89"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+
+[dev-dependencies]

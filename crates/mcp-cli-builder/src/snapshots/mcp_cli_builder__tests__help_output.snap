@@ -1,0 +1,43 @@
+---
+source: crates/mcp-cli-builder/src/lib.rs
+expression: help_output
+---
+Test MCP Server
+
+Start the MCP server in stdio mode by running the command:
+  test-server
+
+To use SSE (Server-Sent Events), pass the --host and/or the --port options
+  test-server --port 8080
+
+Usage: test-server [OPTIONS]
+
+Options:
+      --timeout <timeout>
+          Timeout for requests made  (in humantime format, see
+          <https://docs.rs/humantime/latest/humantime/>)
+          
+          [default: 60s]
+
+      --host <host>
+          Host to bind the server to
+
+  -p, --port <port>
+          Port to bind the server to
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version
+
+MCP server: Test MCP Server
+
+Instructions:
+This is a test server for demonstration purposes
+
+Tools:
+1. Test Tool
+    A test tool for demonstration
+2. another_tool
+    A tool that doubles a number

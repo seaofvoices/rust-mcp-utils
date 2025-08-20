@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'The version to release starting with `v`'
+        required: true
+        type: string
+
+      release_ref:
+        description: 'The branch, tag or SHA to checkout (default to latest)'
+        default: ''
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish-crate:
+    name: Publish crates
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+
+      - name: Publish mcp-utils crate
+        shell: bash
+        run: cargo publish -p mcp-utils
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      - name: Publish mcp-cli-builder crate
+        shell: bash
+        run: cargo publish -p mcp-cli-builder
+        env:
+            CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+  create-release:
+    needs: publish-crate
+
+    name: Create release
+    runs-on: ubuntu-latest
+
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create tag
+        run: |
+          git fetch --tags --no-recurse-submodules
+          if [ ! $(git tag -l ${{ inputs.release_tag }}) ]; then
+            git tag ${{ inputs.release_tag }}
+            git push origin ${{ inputs.release_tag }}
+          fi
+
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          name: ${{ inputs.release_tag }}
+          draft: false

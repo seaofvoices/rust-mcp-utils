@@ -1,0 +1,5 @@
+---
+source: crates/mcp-cli-builder/src/lib.rs
+expression: err
+---
+test-server 1.0.0
