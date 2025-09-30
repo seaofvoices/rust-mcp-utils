@@ -30,7 +30,8 @@ macro_rules! setup_tools {
         impl TryFrom<rust_mcp_sdk::schema::CallToolRequestParams> for $enum_name {
             type Error = rust_mcp_sdk::schema::schema_utils::CallToolError;
 
-            fn try_from(value: rust_mcp_sdk::schema::CallToolRequestParams) -> Result<Self, Self::Error> {
+            fn try_from(mut value: rust_mcp_sdk::schema::CallToolRequestParams) -> Result<Self, Self::Error> {
+                value.arguments.get_or_insert_default();
                 Ok(Self {
                     inner: __tool_setup::InnerTools::try_from(value)?,
                 })
