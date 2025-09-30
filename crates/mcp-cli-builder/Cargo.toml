@@ -1,6 +1,6 @@
 [package]
 name = "mcp-cli-builder"
-version = "0.1.0"
+version = "0.1.1"
 description = "Command-line interface generation for MCP servers built with mcp-utils"
 authors = ["jeparlefrancais <jeparlefrancais21@gmail.com>"]
 edition = "2024"
@@ -13,7 +13,7 @@ readme = "README.md"
 github = { repository = "seaofvoices/rust-mcp-utils" }
 
 [dependencies]
-mcp-utils = { path = "../mcp-utils", version = "0.1.0" }
+mcp-utils = { path = "../mcp-utils", version = "0.1.1" }
 
 rust-mcp-sdk = { workspace = true, default-features = false, features = [ "server", "hyper-server", "macros", "2025_06_18" ] }
 
