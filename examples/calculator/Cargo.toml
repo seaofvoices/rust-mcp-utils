@@ -6,8 +6,8 @@ license = "MIT"
 publish = false
 
 [dependencies]
-mcp-utils = { path = "../../crates/mcp-utils", version = "0.1.1" }
-mcp-cli-builder = { path = "../../crates/mcp-cli-builder", version = "0.1.1" }
+mcp-utils = { path = "../../crates/mcp-utils", version = "0.1.2" }
+mcp-cli-builder = { path = "../../crates/mcp-cli-builder", version = "0.1.2" }
 
 rust-mcp-sdk = { workspace = true }
 
