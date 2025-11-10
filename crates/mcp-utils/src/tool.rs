@@ -171,16 +171,8 @@ where
         let value = StructuredTool::call(self)
             .result()
             .map_err(CallToolError::new)?;
-        Ok(
-            CallToolResult::text_content(vec![]).with_structured_content(match value {
-                serde_json::Value::Object(map) => map,
-                value => {
-                    let mut map = serde_json::Map::new();
-                    map.insert("result".to_string(), value);
-                    map
-                }
-            }),
-        )
+
+        build_tool_result(value)
     }
 }
 
@@ -195,8 +187,17 @@ where
             .await
             .result()
             .map_err(CallToolError::new)?;
-        Ok(
-            CallToolResult::text_content(vec![]).with_structured_content(match value {
+
+        build_tool_result(value)
+    }
+}
+
+fn build_tool_result(value: serde_json::Value) -> Result<CallToolResult, CallToolError> {
+    let text_representation = serde_json::to_string(&value).map_err(CallToolError::new)?;
+
+    Ok(
+        CallToolResult::text_content(vec![TextContent::new(text_representation, None, None)])
+            .with_structured_content(match value {
                 serde_json::Value::Object(map) => map,
                 value => {
                     let mut map = serde_json::Map::new();
@@ -204,8 +205,7 @@ where
                     map
                 }
             }),
-        )
-    }
+    )
 }
 
 enum CustomToolInner<'a> {

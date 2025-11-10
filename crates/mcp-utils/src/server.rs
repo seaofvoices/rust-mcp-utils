@@ -176,7 +176,7 @@ where
     async fn handle_list_tools_request(
         &self,
         request: ListToolsRequest,
-        runtime: &dyn McpServer,
+        runtime: Arc<dyn McpServer>,
     ) -> Result<ListToolsResult, RpcError> {
         runtime.assert_server_request_capabilities(request.method())?;
 
@@ -190,7 +190,7 @@ where
     async fn handle_call_tool_request(
         &self,
         request: CallToolRequest,
-        runtime: &dyn McpServer,
+        runtime: Arc<dyn McpServer>,
     ) -> Result<CallToolResult, CallToolError> {
         runtime
             .assert_server_request_capabilities(request.method())

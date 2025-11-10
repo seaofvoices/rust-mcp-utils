@@ -13,7 +13,7 @@ readme = "README.md"
 github = { repository = "seaofvoices/rust-mcp-utils" }
 
 [dependencies]
-rust-mcp-sdk = { workspace = true, default-features = false, features = [ "server", "hyper-server", "macros", "2025_06_18" ] }
+rust-mcp-sdk = { workspace = true }
 
 async-trait = "0.1.89"
 serde = { version = "1.0", features = ["derive"] }
