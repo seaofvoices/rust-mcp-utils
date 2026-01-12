@@ -277,23 +277,23 @@ mod tests {
     fn test_short_help_command_snapshot() {
         let builder = get_builder();
 
-        let err = match inner_run::<TestTools, _>(builder, ["test-server", "-h"]) {
+        let help_output = match inner_run::<TestTools, _>(builder, ["test-server", "-h"]) {
             Err(e) => e.to_string(),
             Ok(_) => panic!("Expected help error, but inner_run succeeded"),
         };
 
-        insta::assert_snapshot!("help_short_output", err);
+        insta::assert_snapshot!("help_short_output", help_output);
     }
 
     #[test]
     fn test_version_command_snapshot() {
         let builder = get_builder();
 
-        let err = match inner_run::<TestTools, _>(builder, ["test-server", "--version"]) {
+        let output = match inner_run::<TestTools, _>(builder, ["test-server", "--version"]) {
             Err(e) => e.to_string(),
             Ok(_) => panic!("Expected help error, but inner_run succeeded"),
         };
 
-        insta::assert_snapshot!("version_output", err);
+        insta::assert_snapshot!("version_output", output);
     }
 }

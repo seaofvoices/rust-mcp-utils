@@ -14,8 +14,7 @@ Usage: test-server [OPTIONS]
 
 Options:
       --timeout <timeout>
-          Timeout for requests made  (in humantime format, see
-          <https://docs.rs/humantime/latest/humantime/>)
+          Timeout for requests made  (in humantime format, see <https://docs.rs/humantime/latest/humantime/>)
           
           [default: 60s]
 

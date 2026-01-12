@@ -2,13 +2,16 @@ use std::{sync::Arc, time::Duration};
 
 use async_trait::async_trait;
 use rust_mcp_sdk::{
-    McpServer, StdioTransport, TransportOptions,
+    McpServer, StdioTransport, ToMcpServerHandler, TransportOptions,
     error::McpSdkError,
-    mcp_server::{HyperServerOptions, ServerHandler, hyper_server, server_runtime::create_server},
+    mcp_server::{
+        HyperServerOptions, McpServerOptions, ServerHandler, hyper_server,
+        server_runtime::create_server,
+    },
     schema::{
-        CallToolRequest, CallToolRequestParams, CallToolResult, Implementation, InitializeResult,
-        LATEST_PROTOCOL_VERSION, ListToolsRequest, ListToolsResult, RpcError, ServerCapabilities,
-        ServerCapabilitiesTools, schema_utils::CallToolError,
+        CallToolRequestParams, CallToolResult, Implementation, InitializeResult,
+        LATEST_PROTOCOL_VERSION, ListToolsResult, PaginatedRequestParams, RpcError,
+        ServerCapabilities, ServerCapabilitiesTools, schema_utils::CallToolError,
     },
 };
 
@@ -93,11 +96,13 @@ impl ServerBuilder {
             timeout: self.config.timeout,
         };
 
-        create_server(
-            self.get_server_details::<T>(),
-            StdioTransport::new(transport_options)?,
-            Handler::<T>::new(),
-        )
+        create_server(McpServerOptions {
+            server_details: self.get_server_details::<T>(),
+            transport: StdioTransport::new(transport_options)?,
+            handler: Handler::<T>::new().to_mcp_server_handler(),
+            task_store: None,
+            client_task_store: None,
+        })
         .start()
         .await
     }
@@ -116,7 +121,7 @@ impl ServerBuilder {
 
         hyper_server::create_server(
             self.get_server_details::<T>(),
-            Handler::<T>::new(),
+            Handler::<T>::new().to_mcp_server_handler(),
             HyperServerOptions {
                 host: Some(host.into())
                     .filter(|host| !host.is_empty())
@@ -139,6 +144,10 @@ impl ServerBuilder {
                 name: self.config.name,
                 version: self.config.version,
                 title: Some(self.config.title).filter(|title| !title.is_empty()),
+                description: Some(self.config.description)
+                    .filter(|description| !description.is_empty()),
+                website_url: None,
+                icons: Default::default(),
             },
             capabilities: ServerCapabilities {
                 tools: if T::get_tools().is_empty() {
@@ -175,11 +184,9 @@ where
 {
     async fn handle_list_tools_request(
         &self,
-        request: ListToolsRequest,
+        params: Option<PaginatedRequestParams>,
         runtime: Arc<dyn McpServer>,
     ) -> Result<ListToolsResult, RpcError> {
-        runtime.assert_server_request_capabilities(request.method())?;
-
         Ok(ListToolsResult {
             meta: None,
             next_cursor: None,
@@ -189,14 +196,10 @@ where
 
     async fn handle_call_tool_request(
         &self,
-        request: CallToolRequest,
+        params: CallToolRequestParams,
         runtime: Arc<dyn McpServer>,
     ) -> Result<CallToolResult, CallToolError> {
-        runtime
-            .assert_server_request_capabilities(request.method())
-            .map_err(CallToolError::new)?;
-
-        let custom_tool = T::try_from(request.params).map_err(CallToolError::new)?;
+        let custom_tool = T::try_from(params).map_err(CallToolError::new)?;
 
         custom_tool.get_tool().call().await
     }
