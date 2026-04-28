@@ -1,6 +1,6 @@
 [package]
 name = "mcp-utils"
-version = "0.1.2"
+version = "0.1.3"
 description = "Abstractions that extend rust-mcp-sdk for simplified MCP tool definition and server setup"
 authors = ["jeparlefrancais <jeparlefrancais21@gmail.com>"]
 edition = "2024"
