@@ -102,6 +102,7 @@ impl ServerBuilder {
             handler: Handler::<T>::new().to_mcp_server_handler(),
             task_store: None,
             client_task_store: None,
+            message_observer: None,
         })
         .start()
         .await

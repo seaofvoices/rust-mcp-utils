@@ -13,8 +13,8 @@ To use SSE (Server-Sent Events), pass the --host and/or the --port options
 Usage: test-server [OPTIONS]
 
 Options:
-      --timeout <timeout>  Timeout for requests made  (in humantime format, see <https://docs.rs/humantime/latest/humantime/>)
-                           [default: 60s]
+      --timeout <timeout>  Timeout for requests made  (in humantime format, see
+                           <https://docs.rs/humantime/latest/humantime/>) [default: 60s]
       --host <host>        Host to bind the server to
   -p, --port <port>        Port to bind the server to
   -h, --help               Print help (see more with '--help')
