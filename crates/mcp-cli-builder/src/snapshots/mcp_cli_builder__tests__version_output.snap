@@ -1,5 +1,5 @@
 ---
 source: crates/mcp-cli-builder/src/lib.rs
-expression: err
+expression: output
 ---
 test-server 1.0.0
