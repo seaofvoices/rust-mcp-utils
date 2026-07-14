@@ -3,9 +3,9 @@ resolver = "3"
 members = ["crates/*", "examples/*"]
 
 [workspace.dependencies]
-rust-mcp-sdk = { version = "0.9.0", default-features = false, features = [
+rust-mcp-sdk = { version = "0.10.0", default-features = false, features = [
     "server",
     "macros",
     "stdio",
-    "hyper-server",
 ] }
+rust-mcp-actix = "0.1.4"
