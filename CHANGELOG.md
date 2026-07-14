@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.1.4
+
 - upgrade `rust-mcp-sdk` to `0.10.0` ([#8](https://github.com/seaofvoices/rust-mcp-utils/pull/8))
 
 ## 0.1.3
