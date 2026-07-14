@@ -1,13 +1,11 @@
 use std::{sync::Arc, time::Duration};
 
 use async_trait::async_trait;
+use rust_mcp_actix::{ActixServerOptions, create_actix_server};
 use rust_mcp_sdk::{
     McpServer, StdioTransport, ToMcpServerHandler, TransportOptions,
     error::McpSdkError,
-    mcp_server::{
-        HyperServerOptions, McpServerOptions, ServerHandler, hyper_server,
-        server_runtime::create_server,
-    },
+    mcp_server::{McpServerOptions, ServerHandler, server_runtime::create_server},
     schema::{
         CallToolRequestParams, CallToolResult, Implementation, InitializeResult,
         LATEST_PROTOCOL_VERSION, ListToolsResult, PaginatedRequestParams, RpcError,
@@ -94,6 +92,7 @@ impl ServerBuilder {
     {
         let transport_options = TransportOptions {
             timeout: self.config.timeout,
+            ..Default::default()
         };
 
         create_server(McpServerOptions {
@@ -118,12 +117,13 @@ impl ServerBuilder {
     {
         let transport_options = TransportOptions {
             timeout: self.config.timeout,
+            ..Default::default()
         };
 
-        hyper_server::create_server(
+        create_actix_server(
             self.get_server_details::<T>(),
             Handler::<T>::new().to_mcp_server_handler(),
-            HyperServerOptions {
+            ActixServerOptions {
                 host: Some(host.into())
                     .filter(|host| !host.is_empty())
                     .unwrap_or_else(|| "127.0.0.1".to_string()),
